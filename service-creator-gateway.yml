@@ -1,0 +1,41 @@
+# APP DEPLOYMENT
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-creator-gateway
+spec:
+  selector:
+    matchLabels:
+      run: service-creator-gateway
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: service-creator-gateway
+    spec:
+      containers:
+      - name: service-creator-gateway
+        image: localhost:32000/service-creator-gateway:latest
+        ports:
+        - containerPort: 80
+
+
+---
+
+# APP SERVICE
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-creator-gateway
+  labels:
+    run: service-creator-gateway
+spec:
+  ports:
+  - port: 100
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: service-creator-gateway
+  type: NodePort
